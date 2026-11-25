@@ -158,6 +158,12 @@ footer .logo small{color:#a8a294}
 .flinks a:hover,.flinks button:hover{color:#fff}
 .copy{max-width:1200px;margin:36px auto 0;padding-top:20px;border-top:1px solid #3d4437;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13.5px;color:#a8a294}
 #editBtn{display:none}
+.drop{display:flex;align-items:center;justify-content:center;min-height:64px;border:1.5px dashed var(--line);border-radius:14px;background:var(--bg);cursor:pointer;color:var(--mute);font-weight:500}
+.drop input{position:absolute;opacity:0;width:1px;height:1px}.drop:focus-within{outline:3px solid var(--oak)}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px}.thumbs figure{margin:0;position:relative;width:84px;height:84px;border-radius:12px;overflow:hidden}.thumbs img{width:100%;height:100%;object-fit:cover}
+.thumbs button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;line-height:1}
+.tphotos{display:flex;gap:8px;flex-wrap:wrap}.tphotos button{padding:0;border:0;width:76px;height:76px;border-radius:12px;overflow:hidden;cursor:zoom-in;background:#efe8dc}.tphotos img{width:100%;height:100%;object-fit:cover}
+#ph img{display:block;width:100%;max-height:80vh;object-fit:contain;background:#111}
 .stars-in{display:flex;gap:4px;flex-direction:row}.stars-in label{cursor:pointer}.stars-in input{position:absolute;opacity:0;width:1px;height:1px}.stars-in span{font-size:34px;line-height:1;color:var(--line);transition:color .15s}.stars-in label.on span{color:var(--oak)}.stars-in input:focus-visible+span{outline:3px solid var(--oak);border-radius:6px}
 /* dialogs */
 dialog{border:0;padding:0;border-radius:24px;background:var(--paper);color:var(--ink);max-width:min(1000px,94vw);width:100%;box-shadow:0 40px 80px -30px rgba(0,0,0,.5)}
@@ -310,6 +316,7 @@ dialog::backdrop{background:rgba(25,28,22,.66);backdrop-filter:blur(3px)}
 <fieldset class="f full"><legend>Your rating</legend><div class="stars-in" id="rStars" role="radiogroup" aria-label="Rating">
 <label><input type="radio" name="rating" value="1" required><span>★</span></label><label><input type="radio" name="rating" value="2"><span>★</span></label><label><input type="radio" name="rating" value="3"><span>★</span></label><label><input type="radio" name="rating" value="4"><span>★</span></label><label><input type="radio" name="rating" value="5" checked><span>★</span></label></div></fieldset>
 <div class="f full"><label for="rText">Your review</label><textarea id="rText" name="text" required minlength="10" placeholder="Which space did we organise? How does it feel now?"></textarea></div>
+<div class="f full"><label for="rPhotos">Photos of your space <i>(optional, up to 3)</i></label><label class="drop" for="rPhotos"><input type="file" id="rPhotos" accept="image/*" multiple><span>📷 Tap to add photos</span></label><div class="thumbs" id="rThumbs"></div></div>
 <div class="f full"><label for="rEmail">Email <i>(optional, not shown publicly)</i></label><input id="rEmail" name="email" type="email" autocomplete="email"></div>
 <label class="check full f" style="flex-direction:row"><input type="checkbox" name="consent" required><span>I agree that my first name, city and review may be shown on this website.</span></label>
 <div class="f full row" style="flex-direction:row"><button class="btn" type="submit">Send review</button><button class="btn ghost" type="button" id="revCancel">Cancel</button></div>
@@ -353,6 +360,7 @@ dialog::backdrop{background:rgba(25,28,22,.66);backdrop-filter:blur(3px)}
 <div class="lbbody"><div class="lbpair" id="lbPair"></div><p class="hint" id="lbDesc" style="margin-top:12px"></p>
 <div class="lbnav"><button class="mini" id="lbPrev">← Previous</button><button class="mini" id="lbNext">Next →</button></div></div></dialog>
 
+<dialog id="ph" aria-label="Customer photo"><div class="dhead"><h3 style="margin:0">Customer photo</h3><button class="x" data-close aria-label="Close">×</button></div><div id="phBody"></div></dialog>
 <dialog id="legal"><div class="dhead"><h3 id="legalTitle" style="margin:0"></h3><button class="x" data-close aria-label="Close">×</button></div><div class="lbbody" id="legalBody"></div></dialog>
 
 <dialog id="admin" aria-label="Website editor"><div class="dhead"><div><h3 style="margin:0">Website editor</h3><p class="hint">Changes preview instantly. Press Save to publish them.</p></div><button class="x" data-close aria-label="Close">×</button></div>
@@ -441,7 +449,7 @@ function render(){
  $('#projectGrid').innerHTML=list.length?list.map(([p,i])=>{const k=KN[p.cat]||'storage',pr=p.pairs[0]||{};return `<article class="card"><button class="ba" data-open="${i}" aria-label="View photos of ${esc(p.title)}"><figure>${pic(pr.before,k,false,i*7+1,'Before: '+p.title)}<figcaption>Before</figcaption></figure><figure>${pic(pr.after,k,true,i*7+2,'After: '+p.title)}<figcaption>After</figcaption></figure></button><div class="body"><span class="meta">${esc(p.cat)}</span><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p><span class="count">${p.pairs.length} before & after ${p.pairs.length===1?'pair':'pairs'}${p.demo?' · demo project':''}</span></div></article>`}).join(''):`<div class="empty" style="grid-column:1/-1">New projects in this category are coming soon.</div>`;
  $('#steps').innerHTML=C.steps.map((s,i)=>`<div class="step"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${STEPI[i%4]}</svg></div><small>Step ${i+1}</small><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join('');
  $('#areaPills').innerHTML=areas.map(a=>`<span>${esc(a)}</span>`).join('');
- $('#tgrid').innerHTML=C.testimonials.length?C.testimonials.map(t=>{const n=Math.max(0,Math.min(5,+t.rating||0));return `<figure class="tcard" style="margin:0">${t.sample?'<span class="sample">Sample review</span>':''}<div class="stars" aria-label="${n} out of 5 stars">${'★'.repeat(n)}${'☆'.repeat(5-n)}</div><blockquote>${esc(t.text)}</blockquote><figcaption class="count">${esc(t.name)}</figcaption></figure>`}).join(''):`<div class="empty" style="grid-column:1/-1">Reviews from clients will appear here soon.</div>`;
+ $('#tgrid').innerHTML=C.testimonials.length?C.testimonials.map(t=>{const n=Math.max(0,Math.min(5,+t.rating||0));return `<figure class="tcard" style="margin:0">${t.sample?'<span class="sample">Sample review</span>':''}<div class="stars" aria-label="${n} out of 5 stars">${'★'.repeat(n)}${'☆'.repeat(5-n)}</div><blockquote>${esc(t.text)}</blockquote>${(t.photos||[]).filter(srcOf).length?`<div class="tphotos">${(t.photos||[]).filter(srcOf).map(u=>`<button type="button" data-ph="${esc(srcOf(u))}" aria-label="View customer photo"><img src="${esc(srcOf(u))}" alt="Customer photo" loading="lazy"></button>`).join('')}</div>`:''}<figcaption class="count">${esc(t.name)}</figcaption></figure>`}).join(''):`<div class="empty" style="grid-column:1/-1">Reviews from clients will appear here soon.</div>`;
  const ig=safeUrl(ct.instagram)&&/^https:/.test(ct.instagram)?ct.instagram:'';
  $('#clist').innerHTML=[[ICON.mail,'Email',`<a href="${esc(mail('Home organisation enquiry'))}">${esc(ct.email)}</a>`],[ICON.phone,'Phone & WhatsApp',`<a href="tel:${esc(String(ct.phone).replace(/[^\d+]/g,''))}">${esc(ct.phone)}</a>`],[ICON.pin,'Based in',esc(b.location)+' · visits to '+esc(areas.join(', '))],[ICON.ig,'Instagram',ig?`<a href="${esc(ig)}">${esc(ig.replace(/^https:\/\/(www\.)?/,''))}</a>`:'Coming soon']].map(([i,l,v])=>`<div><span class="ci">${i}</span><span><small>${l}</small>${v}</span></div>`).join('');
  $('#waBtn').href=wa(`Hello ${b.name}, I'd like to know more about your home organisation services.`);$('#mailBtn').href=mail('Home organisation enquiry');
@@ -462,7 +470,8 @@ function openLb(i,j=0){lbP=i;lbI=j;const p=C.projects[i],k=KN[p.cat]||'storage',
 const step=d=>{const n=C.projects[lbP].pairs.length;openLb(lbP,(lbI+d+n)%n)};
 $('#lbPrev').onclick=()=>step(-1);$('#lbNext').onclick=()=>step(1);
 $('#lb').addEventListener('keydown',e=>{if(e.key==='ArrowLeft')step(-1);if(e.key==='ArrowRight')step(1)});
-document.addEventListener('click',e=>{const t=e.target.closest('[data-f],[data-open],[data-book],[data-consult],[data-mode],[data-legal],[data-close]');if(!t)return;
+document.addEventListener('click',e=>{const ph=e.target.closest('[data-ph]');if(ph){const u=safeUrl(ph.dataset.ph);if(u){$('#phBody').innerHTML=`<img src="${esc(u)}" alt="Customer photo">`;$('#ph').showModal()}return}
+ const t=e.target.closest('[data-f],[data-open],[data-book],[data-consult],[data-mode],[data-legal],[data-close]');if(!t)return;
  if(t.dataset.f){filter=t.dataset.f;render()}
  else if(t.dataset.open)openLb(+t.dataset.open);
  else if(t.dataset.close!==undefined)t.closest('dialog').close();
@@ -484,15 +493,19 @@ $('#bookForm').addEventListener('submit',async e=>{e.preventDefault();const f=e.
 /* ---------- customer reviews ---------- */
 const rf=$('#revForm'),paint=()=>{const v=+(rf.querySelector('[name=rating]:checked')||{}).value||0;$$('#rStars label').forEach((l,i)=>l.classList.toggle('on',i<v))};
 rf.addEventListener('change',paint);paint();
+let rPics=[];const drawPics=()=>{$('#rThumbs').innerHTML=rPics.map((p,i)=>`<figure><img src="${p.url}" alt=""><button type="button" data-rp="${i}" aria-label="Remove photo">×</button></figure>`).join('')};
+$('#rPhotos').addEventListener('change',async e=>{for(const f of [...e.target.files].slice(0,3-rPics.length)){try{const b=await toBlob(f,1600,.82);rPics.push({blob:b,url:URL.createObjectURL(b)})}catch(_){}}e.target.value='';drawPics()});
+$('#rThumbs').addEventListener('click',e=>{const b=e.target.closest('[data-rp]');if(b){rPics.splice(+b.dataset.rp,1);drawPics()}});
 $('#revOpen').onclick=()=>{rf.hidden=false;$('#revSent').hidden=true;$('#rName').focus()};
 $('#revCancel').onclick=()=>{rf.hidden=true};
 rf.addEventListener('submit',async e=>{e.preventDefault();if(!rf.checkValidity()){rf.reportValidity();return}
  const d=Object.fromEntries(new FormData(rf)),s=$('#revSent'),btn=rf.querySelector('[type=submit]'),to=String(C.contact.email||'').trim();
  const txt=`New review for ${C.brand.name}\nName: ${d.name}${d.place?' ('+d.place+')':''}\nRating: ${d.rating}/5\n\n${d.text}`;
  s.hidden=false;btn.disabled=true;s.innerHTML='<p>Sending your review…</p>';
- try{const r=await fetch('https://formsubmit.co/ajax/'+encodeURIComponent(to),{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:'New review ('+d.rating+'★) from '+d.name,_template:'table',_captcha:'false',name:d.name,city:d.place||'-',rating:d.rating+' / 5',review:d.text,email:d.email||'-',consent:'Yes – may be shown on website'})});const j=await r.json();
-  if(j.success===true||j.success==='true'){s.innerHTML=`<p><b>Thank you, ${esc(d.name)}!</b> Your review has been sent and will appear here once ${esc(C.brand.name)} has approved it.</p>`;rf.reset();paint();btn.disabled=false;setTimeout(()=>{rf.hidden=true},6000);return}}catch(_){}
- btn.disabled=false;s.innerHTML=`<p>Sorry, sending didn't work. You can send your review directly instead:</p><div class="row"><a class="btn small" href="${esc(wa(txt))}">Send via WhatsApp</a><a class="btn small ghost" href="${esc(mail('Review for '+C.brand.name,txt))}">Send via email</a></div>`});
+ try{const fd=new FormData();Object.entries({_subject:'New review ('+d.rating+'★) from '+d.name,_template:'table',_captcha:'false',name:d.name,city:d.place||'-',rating:d.rating+' / 5',review:d.text,email:d.email||'-',photos:rPics.length?rPics.length+' attached':'none',consent:'Yes – may be shown on website'}).forEach(([k,v])=>fd.append(k,v));rPics.forEach((p,i)=>fd.append('attachment'+(i+1),p.blob,'photo-'+(i+1)+'.jpg'));
+  const r=await fetch('https://formsubmit.co/ajax/'+encodeURIComponent(to),{method:'POST',headers:{Accept:'application/json'},body:fd});const j=await r.json();
+  if(j.success===true||j.success==='true'){s.innerHTML=`<p><b>Thank you, ${esc(d.name)}!</b> Your review has been sent and will appear here once ${esc(C.brand.name)} has approved it.</p>`;rf.reset();rPics=[];drawPics();paint();btn.disabled=false;setTimeout(()=>{rf.hidden=true},6000);return}}catch(_){}
+ btn.disabled=false;s.innerHTML=`<p>Sorry, sending didn't work. You can send your review directly instead${rPics.length?' (please attach your photos in the chat or email)':''}:</p><div class="row"><a class="btn small" href="${esc(wa(txt))}">Send via WhatsApp</a><a class="btn small ghost" href="${esc(mail('Review for '+C.brand.name,txt))}">Send via email</a></div>`});
 
 /* ---------- editor ---------- */
 let ART=null,ASSETS=null,tab='General';
@@ -513,11 +526,11 @@ Pricing:()=>['inperson','online'].map(k=>`<div class="ablock"><h4>${k==='online'
 Gallery:()=>`<p class="hint" style="margin-bottom:14px">Add a project whenever you finish a job. Each project can hold many before & after pairs.</p>`+ADD('projects','Add new project')+'<div style="height:14px"></div>'+C.projects.map((p,i)=>`<div class="ablock">${H(p.title||'Project','projects',i)}<div class="two"><div><label for="cat${i}">Category</label><select id="cat${i}" data-p="projects.${i}.cat">${C.categories.map(c=>`<option ${c===p.cat?'selected':''}>${esc(c)}</option>`).join('')}</select></div>${F('Title','projects.'+i+'.title')}</div>${F('Short description','projects.'+i+'.desc',2)}
 ${p.pairs.map((q,j)=>`<div class="two" style="border-top:1px solid var(--line);padding-top:10px">${IM('Before '+(j+1),'projects.'+i+'.pairs.'+j+'.before')}${IM('After '+(j+1),'projects.'+i+'.pairs.'+j+'.after')}</div><div><button class="mini danger" data-act="del" data-l="projects.${i}.pairs" data-i="${j}">Remove pair ${j+1}</button></div>`).join('')}${ADD('projects.'+i+'.pairs','Add before & after pair')}
 <label class="check"><input type="checkbox" data-p="projects.${i}.demo" ${p.demo?'checked':''}> Mark as demo project</label></div>`).join(''),
-Reviews:()=>C.testimonials.map((t,i)=>`<div class="ablock">${H(t.name||'Review','testimonials',i)}<div class="two">${F('Name','testimonials.'+i+'.name')}${F('Rating (1–5)','testimonials.'+i+'.rating')}</div>${F('Review','testimonials.'+i+'.text',3)}<label class="check"><input type="checkbox" data-p="testimonials.${i}.sample" ${t.sample?'checked':''}> Show “Sample review” label</label></div>`).join('')+ADD('testimonials','Add review'),
+Reviews:()=>C.testimonials.map((t,i)=>`<div class="ablock">${H(t.name||'Review','testimonials',i)}<div class="two">${F('Name','testimonials.'+i+'.name')}${F('Rating (1–5)','testimonials.'+i+'.rating')}</div>${F('Review','testimonials.'+i+'.text',3)}${(t.photos||[]).map((u,j)=>`<div style="display:flex;gap:8px;align-items:end;flex-wrap:wrap">${IM('Customer photo '+(j+1),'testimonials.'+i+'.photos.'+j)}<button class="mini danger" data-act="del" data-l="testimonials.${i}.photos" data-i="${j}">Remove</button></div>`).join('')}${ADD('testimonials.'+i+'.photos','Add customer photo')}<label class="check"><input type="checkbox" data-p="testimonials.${i}.sample" ${t.sample?'checked':''}> Show “Sample review” label</label></div>`).join('')+ADD('testimonials','Add review'),
 Legal:()=>`<div class="ablock">${F('Impressum','impressum',12)}</div><div class="ablock">${F('Privacy policy','privacy',12)}</div>`
 };
-const NEW={services:()=>({id:uid(),kind:'storage',title:'New service',desc:'',price:'',img:''}),projects:()=>({id:uid(),demo:false,cat:C.categories[0],title:'New project',desc:'',pairs:[{before:'',after:''}]}),testimonials:()=>({name:'',text:'',rating:5,sample:false})};
-function drawAdmin(){C._areas=(C.contact.areas||[]).join(', ');$('#tabs').innerHTML=Object.keys(TABS).map(k=>`<button class="chip" aria-pressed="${k===tab}" data-tab="${k}">${k}</button>`).join('');const sc=$('#adminBody').scrollTop;$('#adminBody').innerHTML=TABS[tab]();$('#adminBody').scrollTop=sc;delete C._areas}
+const NEW={services:()=>({id:uid(),kind:'storage',title:'New service',desc:'',price:'',img:''}),projects:()=>({id:uid(),demo:false,cat:C.categories[0],title:'New project',desc:'',pairs:[{before:'',after:''}]}),testimonials:()=>({name:'',text:'',rating:5,sample:false,photos:[]})};
+function drawAdmin(){C.testimonials.forEach(t=>{if(!Array.isArray(t.photos))t.photos=[]});C._areas=(C.contact.areas||[]).join(', ');$('#tabs').innerHTML=Object.keys(TABS).map(k=>`<button class="chip" aria-pressed="${k===tab}" data-tab="${k}">${k}</button>`).join('');const sc=$('#adminBody').scrollTop;$('#adminBody').innerHTML=TABS[tab]();$('#adminBody').scrollTop=sc;delete C._areas}
 const mark=()=>{dirty=true;T('saveMsg','Unsaved changes');render()};
 let tm;$('#admin').addEventListener('input',e=>{const el=e.target;if(!el.dataset.p)return;let v=el.type==='checkbox'?el.checked:el.value;
  if(el.dataset.p==='_areas'){C.contact.areas=v.split(',').map(s=>s.trim()).filter(Boolean)}else{if(el.dataset.p.endsWith('rating'))v=Math.max(1,Math.min(5,parseInt(v)||5));put(el.dataset.p,v)}
@@ -525,7 +538,7 @@ let tm;$('#admin').addEventListener('input',e=>{const el=e.target;if(!el.dataset
 $('#admin').addEventListener('click',e=>{const t=e.target.closest('[data-tab],[data-act]');if(!t)return;e.preventDefault();
  if(t.dataset.tab){tab=t.dataset.tab;$('#adminBody').scrollTop=0;drawAdmin();return}
  const a=t.dataset.act;if(a==='clr')put(t.dataset.p,'');else{const L=get(t.dataset.l),i=+t.dataset.i;
-  if(a==='add'){const k=t.dataset.l;const n=NEW[k]?NEW[k]():/pairs$/.test(k)?{before:'',after:''}:{name:'',price:''};k==='projects'?L.unshift(n):L.push(n)}
+  if(a==='add'){const k=t.dataset.l;const n=NEW[k]?NEW[k]():/pairs$/.test(k)?{before:'',after:''}:/photos$/.test(k)?'':{name:'',price:''};k==='projects'?L.unshift(n):L.push(n)}
   if(a==='del'){if(t.dataset.armed){L.splice(i,1)}else{t.dataset.armed=1;t.textContent='Tap again to delete';return}}
   if(a==='up'&&i>0)[L[i-1],L[i]]=[L[i],L[i-1]]}
  drawAdmin();mark()});
