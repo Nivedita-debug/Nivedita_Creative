@@ -1,0 +1,229 @@
+{
+ "brand": {
+  "name": "Nivedita",
+  "tagline": "Home Organisation & Decluttering",
+  "location": "Munich, Germany"
+ },
+ "hero": {
+  "title": "Creating Beautifully Organised Spaces, One Home at a Time.",
+  "sub": "Helping you declutter, organise and transform your home into a functional, peaceful and beautiful space.",
+  "img": ""
+ },
+ "about": {
+  "title": "A Little About Me",
+  "text": "Hi, I'm Nivedita! I genuinely enjoy organising homes, decluttering spaces and finding smart, practical ways to make everyday life easier.\n\nI believe an organised home is not just about looking beautiful; it's about creating functional spaces that save time, reduce stress and make everyday routines simpler.\n\nI'm passionate about helping people create homes that are tidy, practical, comfortable and easy to maintain.",
+  "photo": ""
+ },
+ "contact": {
+  "email": "niveditachaudhari17@gmail.com",
+  "phone": "+49 176 26839721",
+  "whatsapp": "4917626839721",
+  "instagram": "",
+  "areas": [
+   "Munich",
+   "Ingolstadt",
+   "Augsburg",
+   "Nearby areas"
+  ]
+ },
+ "consult": "30",
+ "services": [
+  {
+   "id": "s1",
+   "kind": "wardrobe",
+   "title": "Wardrobe Organisation",
+   "desc": "Decluttering clothes, organising shelves and creating practical wardrobe arrangements.",
+   "price": "€40 · 2 hours",
+   "img": ""
+  },
+  {
+   "id": "s2",
+   "kind": "kitchen",
+   "title": "Kitchen Organisation",
+   "desc": "Organising cabinets, drawers, pantry shelves and everyday kitchen essentials.",
+   "price": "€60 · 3 hours",
+   "img": ""
+  },
+  {
+   "id": "s3",
+   "kind": "bedroom",
+   "title": "Bedroom Organisation",
+   "desc": "Creating peaceful, functional and clutter-free bedrooms.",
+   "price": "€20 / hour",
+   "img": ""
+  },
+  {
+   "id": "s4",
+   "kind": "storage",
+   "title": "Storage & Utility Organisation",
+   "desc": "Making better use of available storage spaces.",
+   "price": "€20 / hour",
+   "img": ""
+  },
+  {
+   "id": "s5",
+   "kind": "declutter",
+   "title": "General Home Decluttering",
+   "desc": "Sorting, categorising and organising household belongings.",
+   "price": "€80 · 4 hours",
+   "img": ""
+  },
+  {
+   "id": "s6",
+   "kind": "online",
+   "title": "Online Home Organisation Consultation",
+   "desc": "Personalised virtual guidance for customers living outside Munich.",
+   "price": "€10 / hour",
+   "img": ""
+  }
+ ],
+ "pricing": {
+  "inperson": [
+   {
+    "name": "Hourly organisation service",
+    "price": "€20 / hour"
+   },
+   {
+    "name": "2-hour wardrobe organisation",
+    "price": "€40"
+   },
+   {
+    "name": "3-hour kitchen organisation",
+    "price": "€60"
+   },
+   {
+    "name": "4-hour home organisation",
+    "price": "€80"
+   }
+  ],
+  "online": [
+   {
+    "name": "60-minute online consultation",
+    "price": "€10"
+   },
+   {
+    "name": "Two online sessions",
+    "price": "€20"
+   }
+  ],
+  "note": "Custom packages are available depending on your requirements and the size of the space."
+ },
+ "steps": [
+  {
+   "title": "Get in Touch",
+   "text": "Contact me and explain which space needs organising."
+  },
+  {
+   "title": "Free Consultation",
+   "text": "A free 30-minute chat where we discuss your requirements and expectations."
+  },
+  {
+   "title": "Personalised Organisation",
+   "text": "I help you declutter and organise your space."
+  },
+  {
+   "title": "Enjoy Your Space",
+   "text": "Enjoy a more functional, tidy and organised home!"
+  }
+ ],
+ "projects": [
+  {
+   "id": "p1",
+   "demo": true,
+   "cat": "Wardrobe Organisation",
+   "title": "Bedroom wardrobe reset",
+   "desc": "Clothes sorted by type and colour, folded stacks for knitwear and space freed for daily outfits.",
+   "pairs": [
+    {
+     "before": "",
+     "after": ""
+    },
+    {
+     "before": "",
+     "after": ""
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "demo": true,
+   "cat": "Kitchen Organisation",
+   "title": "Pantry shelves",
+   "desc": "Matching jars, grouped ingredients and labels so everything is easy to find and refill.",
+   "pairs": [
+    {
+     "before": "",
+     "after": ""
+    }
+   ]
+  },
+  {
+   "id": "p3",
+   "demo": true,
+   "cat": "Bedroom Makeovers",
+   "title": "Calm guest bedroom",
+   "desc": "A cleared bed, a tidy nightstand and a peaceful room that is ready for visitors.",
+   "pairs": [
+    {
+     "before": "",
+     "after": ""
+    }
+   ]
+  },
+  {
+   "id": "p4",
+   "demo": true,
+   "cat": "Storage Solutions",
+   "title": "Hallway storage shelf",
+   "desc": "Labelled baskets for shoes, scarves and everyday bits that used to pile up by the door.",
+   "pairs": [
+    {
+     "before": "",
+     "after": ""
+    }
+   ]
+  },
+  {
+   "id": "p5",
+   "demo": true,
+   "cat": "Home Decluttering",
+   "title": "Spare room declutter",
+   "desc": "Belongings sorted into keep, donate and recycle so the room could be used again.",
+   "pairs": [
+    {
+     "before": "",
+     "after": ""
+    }
+   ]
+  }
+ ],
+ "categories": [
+  "Wardrobe Organisation",
+  "Kitchen Organisation",
+  "Bedroom Makeovers",
+  "Storage Solutions",
+  "Home Decluttering"
+ ],
+ "testimonials": [
+  {
+   "name": "Sample client, Munich",
+   "text": "This is a sample review. Replace it with real feedback from your first customers.",
+   "rating": 5,
+   "sample": true
+  },
+  {
+   "name": "Sample client, Augsburg",
+   "text": "Sample review – edit or delete it from the editor once real reviews arrive.",
+   "rating": 5,
+   "sample": true
+  },
+  {
+   "name": "Sample client, online",
+   "text": "Sample review for an online consultation. Replace with a real customer's words.",
+   "rating": 5,
+   "sample": true
+  }
+ ],
+ "impressum": "Angaben gemäß § 5 DDG\n\nNivedita – Home Organisation & Decluttering\nFull legal name: please add\nStreet and house number: please add\nPostcode and city: please add, Munich, Germany\n\nContact\nEmail: niveditachaudhari17@gmail.com\nPhone: +49 176 26839721\n\nPlease complete this Impressum before sharing the website publicly.",
+ "privacy": "Privacy Policy\n\nThis website does not use cookies, analytics or tracking.\n\nWhen you use the booking form, your details are not stored on this website. The form prepares a message that you send yourself by WhatsApp or email. I use the details you send only to reply to your enquiry and to arrange your appointment, and I do not pass them on to third parties.\n\nYou can ask me at any time to see, correct or delete the information you have sent me. Contact: niveditachaudhari17@gmail.com\n\nPlease review this text before sharing the website publicly."
+}
