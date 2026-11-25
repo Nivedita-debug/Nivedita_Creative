@@ -343,7 +343,7 @@ dialog::backdrop{background:rgba(25,28,22,.66);backdrop-filter:blur(3px)}
 
 <dialog id="admin" aria-label="Website editor"><div class="dhead"><div><h3 style="margin:0">Website editor</h3><p class="hint">Changes preview instantly. Press Save to publish them.</p></div><button class="x" data-close aria-label="Close">×</button></div>
 <div class="tabs" id="tabs"></div><div id="adminBody"></div>
-<div class="afoot"><span id="saveMsg">No unsaved changes</span><button class="btn" id="saveBtn">Save & publish</button></div></dialog>
+<div class="afoot"><span id="saveMsg" style="flex:1;min-width:200px">No unsaved changes</span><button class="btn" id="saveBtn">Save</button></div></dialog>
 
 <script>
 {
@@ -502,13 +502,15 @@ $('#admin').addEventListener('click',e=>{const t=e.target.closest('[data-tab],[d
   if(a==='del'){if(t.dataset.armed){L.splice(i,1)}else{t.dataset.armed=1;t.textContent='Tap again to delete';return}}
   if(a==='up'&&i>0)[L[i-1],L[i]]=[L[i],L[i-1]]}
  drawAdmin();mark()});
-async function toBlob(file){const img=await createImageBitmap(file);const m=1800,sc=Math.min(1,m/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);return await new Promise(r=>c.toBlob(r,'image/jpeg',.85))}
+async function toBlob(file,m=1800,q=.85){const img=await createImageBitmap(file);const sc=Math.min(1,m/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);c.getContext('2d').drawImage(img,0,0,c.width,c.height);return await new Promise(r=>c.toBlob(r,'image/jpeg',q))}
+const toData=b=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(b)});
 $('#admin').addEventListener('change',async e=>{const el=e.target;if(!el.dataset.img||!el.files[0])return;T('saveMsg','Uploading photo…');
- try{const blob=await toBlob(el.files[0]);let url;
-  if(ASSETS){const r=await ASSETS.upload(blob);url=r.url||('/_blob/'+r.id)}
-  else{url='img/'+uid()+'.jpg';pending[url]=blob;localUrl[url]=URL.createObjectURL(blob)}
-  put(el.dataset.img,url);drawAdmin();mark()}catch(err){T('saveMsg','Photo upload failed – please try a smaller JPG or PNG.')}});
-$('#saveBtn').onclick=async()=>{if(!ART){T('saveMsg','Saving is only available when you open this page from your claude.ai artifact page.');return}
+ try{let url;
+  if(ASSETS){const r=await ASSETS.upload(await toBlob(el.files[0]));url=r.url||('/_blob/'+r.id)}
+  else if(ART){const blob=await toBlob(el.files[0]);url='img/'+uid()+'.jpg';pending[url]=blob;localUrl[url]=URL.createObjectURL(blob)}
+  else url=await toData(await toBlob(el.files[0],1200,.8));
+  put(el.dataset.img,url);const pm=el.dataset.img.match(/^projects\.(\d+)\./);if(pm)C.projects[+pm[1]].demo=false;drawAdmin();mark();T('saveMsg','Photo added – press Save when done')}catch(err){T('saveMsg','Photo upload failed – please try a smaller JPG or PNG.')}});
+$('#saveBtn').onclick=async()=>{if(!ART){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(C,null,1)],{type:'application/json'}));a.download='content.json';document.body.appendChild(a);a.click();a.remove();dirty=false;T('saveMsg','content.json downloaded ✓ Now upload it to GitHub: repository → Add file → Upload files → drop content.json → Commit changes. The site updates in about 1 minute.')}catch(_){T('saveMsg','Download failed – please try another browser.')}return}
  T('saveMsg','Publishing…');$('#saveBtn').disabled=true;
  try{const files={'content.json':{content:JSON.stringify(C,null,1),contentType:'application/json'}};for(const[k,b]of Object.entries(pending))files[k]=b;
   await ART.publish(files);pending={};dirty=false;T('saveMsg','Saved ✓ Your website is updated.')}
